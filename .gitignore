@@ -1,0 +1,9 @@
+# compiled binary
+test_a
+
+# object files
+*.0
+
+# macOS
+.DS_Store
+*.dSYM
