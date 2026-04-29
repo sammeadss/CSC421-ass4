@@ -85,5 +85,20 @@ void *newvec(int n) {
 }
 
 void freevec(void *p) {
-    //TODO
+    if (p == NULL) {
+        return;
+    }
+    
+    // Get the chunk pointer, which is right before the given memory
+    Chunk *c = (Chunk *)p - 1;
+    
+    int cls = size_class(c->size);
+    
+    // Put the chunk back at the head of the free list
+    c->prev = NULL;
+    c->next = free_lists[cls];
+    if (free_lists[cls] != NULL) {
+        free_lists[cls]->prev = c;
+    }
+    free_lists[cls] = c;
 }
