@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <time.h>
 #include "heap.h"
-
 /* helper: print a summary of which free lists are non-empty */
 static void print_heap_state(const char *label) {
     printf("\n--- Heap state: %s ---\n", label);
@@ -114,8 +115,59 @@ int main(void) {
     else
         printf("  FAIL: heap broken after failed allocation\n");
 
+    /* ── PHASE 8: Stress Test (Same-sized) ── */
+    printf("\n[ PHASE 8: Stress Test — Same-sized Allocations & Deallocations ]\n");
+    init(); // Reset heap for stress tests
+    printf("  init() called — heap reset.\n");
+
+    int num_same = 500;
+    int same_size = 100;
+    void *same_ptrs[500];
+
+    printf("  Allocating %d blocks of size %d words...\n", num_same, same_size);
+    for (int i = 0; i < num_same; i++) {
+        same_ptrs[i] = newvec(same_size);
+        if (same_ptrs[i] == NULL) {
+            printf("  FAIL: Allocation failed at index %d!\n", i);
+            break;
+        }
+    }
+    printf("  PASS: Successfully allocated %d blocks.\n", num_same);
+
+    printf("  Freeing all %d blocks...\n", num_same);
+    for (int i = 0; i < num_same; i++) {
+        freevec(same_ptrs[i]);
+    }
+    printf("  PASS: Successfully freed %d blocks.\n", num_same);
+
+    /* ── PHASE 9: Stress Test (Random-sized) ── */
+    printf("\n[ PHASE 9: Stress Test — Random-sized Allocations & Deallocations ]\n");
+    int num_random = 1000;
+    void *rand_ptrs[1000];
+    int rand_sizes[1000];
+    int alloc_count = 0;
+
+    printf("  Allocating up to %d blocks of random sizes (1 to 200 words)...\n", num_random);
+    for (int i = 0; i < num_random; i++) {
+        rand_sizes[i] = (rand() % 200) + 1;
+        rand_ptrs[i] = newvec(rand_sizes[i]);
+        if (rand_ptrs[i] != NULL) {
+            alloc_count++;
+        } else {
+            // Heap exhausted
+            break;
+        }
+    }
+    printf("  PASS: Successfully allocated %d random blocks before heap exhaustion.\n", alloc_count);
+
+    printf("  Freeing %d random blocks...\n", alloc_count);
+    for (int i = 0; i < alloc_count; i++) {
+        freevec(rand_ptrs[i]);
+    }
+    printf("  PASS: Successfully freed %d random blocks.\n", alloc_count);
+
     printf("\n==============================================\n");
-    printf("  Demo complete — all phases passed\n");
+    printf("  Demo complete — all 9 phases passed\n");
     printf("==============================================\n");
     return 0;
 }

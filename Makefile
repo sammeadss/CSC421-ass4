@@ -13,4 +13,4 @@ test_c: heap.c test_c.c
 	$(CC) $(CFLAGS) -o test_c heap.c test_c.c
 
 clean:
-	rm -f test_a test_c
+	rm -f test_a test_b test_c
