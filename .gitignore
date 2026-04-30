@@ -2,7 +2,7 @@
 test_a
 
 # object files
-*.0
+*.o
 
 # macOS
 .DS_Store
