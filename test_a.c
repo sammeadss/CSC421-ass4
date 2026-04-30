@@ -5,15 +5,19 @@ int main(void) {
     init();
 
     int top = NUM_CLASSES - 1;
-
+    
+    // Verify init() placed the initial chunk in the top size class
     if (free_lists[top] == NULL) {
         printf("FAIL: free_lists[%d] is NULL after init\n", top);
         return 1;
     }
 
+    // Check inital chunk's header fields are correct
     Chunk *c = free_lists[top];
     printf("PASS: free_lists[%d] = %p\n", top, (void *)c);
     printf("chunk size = %d words (expect %d)\n", c->size, HEAP_SIZE - (int)(sizeof(Chunk) / sizeof(int)));
+
+    // Verify size_class() handles boundaries and out-of-range values
     printf("prev = %p (expect NULL)\n", (void *)c->prev);
     printf("next = %p (expect NULL)\n", (void *)c->next);
     printf("\nsize_class() checks:\n");

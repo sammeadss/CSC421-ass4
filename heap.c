@@ -2,24 +2,32 @@
 #include <stdio.h>
 #include "heap.h"
 
+// Backing memory pool
 static int heap_pool[HEAP_SIZE];
+
+// One head pointer per size class
 Chunk *free_lists[NUM_CLASSES];
 
+// Maps a size in words to a free list index
 int size_class(int n) {
     if (n <= 0) return 0;
     if (n >= NUM_CLASSES) return NUM_CLASSES - 1;
     return n - 1;
 }
 
+// Sets up the heap
 void init(void) {
     int i;
     for (i = 0; i < NUM_CLASSES; i++) {
         free_lists[i] = NULL;
     }
+
+    // Treat entire pool as one free chunk and insert it
     Chunk *start = (Chunk *)heap_pool;
     start->prev = NULL;
     start->next = NULL;
     start->size = HEAP_SIZE - (int)(sizeof(Chunk) / sizeof(int));
+
     free_lists[size_class(start->size)] = start;
 }
 
