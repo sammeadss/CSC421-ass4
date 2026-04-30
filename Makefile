@@ -12,5 +12,8 @@ test_b: heap.c test_b.c
 test_c: heap.c test_c.c
 	$(CC) $(CFLAGS) -o test_c heap.c test_c.c
 
+live_demo: heap.c live_demo.c
+	$(CC) $(CFLAGS) -o live_demo heap.c live_demo.c
+
 clean:
-	rm -f test_a test_b test_c
+	rm -f test_a test_b test_c live_demo

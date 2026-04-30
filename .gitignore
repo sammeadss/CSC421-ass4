@@ -2,6 +2,7 @@
 test_a
 test_b
 test_c
+live_demo
 
 # object files
 *.o
