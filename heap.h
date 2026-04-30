@@ -9,6 +9,7 @@ typedef struct Chunk {
     struct Chunk *prev; /* word 0 */
     struct Chunk *next; /* word 1 */
     int size; /* word 2 */
+    int data[]; /* user data */
 } Chunk;
 
 // One head pointer per size class

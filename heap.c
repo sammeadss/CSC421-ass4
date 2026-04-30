@@ -81,7 +81,7 @@ void *newvec(int n) {
                 if (c->size - n - header_words >= 1)
                     split_chunk(c, n);
                 // Return memory after the header
-                return (void *)(c + 1);
+                return (void *)(c->data);
             }
             c = c->next;
         }
