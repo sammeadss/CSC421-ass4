@@ -36,7 +36,7 @@ void init(void) {
 
     start->prev = NULL;
     start->next = NULL;
-    start->size = HEAP_SIZE - (int)(sizeof(Chunk) / sizeof(int));
+    start->size = HEAP_SIZE - (int)(sizeof(Chunk) / sizeof(int)) - 1;
     start->flag = CHUNK_FREE;
     write_footer(start);
 
@@ -59,10 +59,10 @@ static void split_chunk(Chunk *c, int n) {
     then add n to get the remainder chunk
     + 1 is for the footer */
     Chunk *remainder = (Chunk *)((int *)(c + 1) + n + 1);
-    /* Original size - n taken - size for new header block
+    /* Original size - n taken - size for new header block - 1 for footer
     sizeof(Chunk) for what's needed for a chunk;
     division for how much of a Chunk's space fit in each int? */
-    remainder->size  = c->size - n - (int)(sizeof(Chunk) / sizeof(int));
+    remainder->size  = c->size - n - (int)(sizeof(Chunk) / sizeof(int)) - 1;
     int cls          = size_class(remainder->size);
     remainder->prev  = NULL;
     remainder->next  = free_lists[cls];
